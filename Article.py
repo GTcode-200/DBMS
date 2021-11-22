@@ -23,6 +23,11 @@ connect()
 
 cur.execute("SELECT * FROM ARTICLE WHERE ARTICLE_ID="+str(a_id))
 row=cur.fetchone()
+au_id=row[1]
+cur.execute("SELECT USER_NAME FROM USER_PERMISSION WHERE USER_ID="+str(au_id))
+uname=cur.fetchone()[0]
+cur.execute("SELECT PER_ID FROM USER_PERMISSION WHERE USER_ID="+uid)
+pid=cur.fetchone()[0]
 
 
 k=450
@@ -36,6 +41,7 @@ def article():
 
     Label(main_screen, text="Title:"+row[3]).pack()
     article_title = Label(main_screen, text="").pack()
+    Label(main_screen,text="Author:"+uname).pack()
 
     Button(text="Edit History", height=1, width=40,command=edit).place(x=1200, y=0)
 
@@ -75,7 +81,7 @@ def article():
     read_comment=cur.fetchall()
 
     for c in read_comment:
-        txt="User "+str(c[2])+" commented at "+str(c[3])[:8]+"\n"+c[4]
+        txt="User "+str(c[2])+" commented on "+str(c[3])+" at "+str(c[4])[:8]+"\n"+c[5]
         Label(main_screen,text=txt).place(x=0,y=k)
         k+=40
 
@@ -90,8 +96,8 @@ def article():
     Label(main_screen, text="Rating: ").pack()
     article_rating = OptionMenu(main_screen, clicked, *ratings).pack()
 
-    if(int(uid)==row[1]):
-        Button(text="Edit Content").pack()
+    if(int(uid)==row[1] or pid==1):
+        Button(text="Edit Content",command=edit_cont).pack()
 
     Button(main_screen,text="BACK",command=back).place(x=1000,y=500)
 
@@ -101,33 +107,37 @@ def article():
 
 def edit():
     main_screen.destroy()
-    os.system("python EditHistory.py")
+    os.system("python EditHistory.py "+uid+" "+a_id)
 
 def post_comment():
     global k
     cur.execute("SELECT * FROM COMMENTS")
     comments=cur.fetchall()
-    print(comments)
+    #print(comments)
     comm_content=comm.get()
     if(not comments):
         comm_id=1
     else:
         comm_id=comments[-1][0]+1
     if(comm_content):
-        cur.execute("INSERT INTO COMMENTS VALUES(%s,%s,%s,%s,%s)",(comm_id,a_id,uid,datetime.now(),comm_content))
+        cur.execute("INSERT INTO COMMENTS VALUES(%s,%s,%s,%s,%s,%s)",(comm_id,a_id,uid,datetime.now(),datetime.now(),comm_content))
         con.commit()
         comm.delete(0,'end')
 
-    cur.execute("SELECT * FROM COMMENTS WHERE ARTICLE_ID="+a_id)
-    c=cur.fetchall()[-1]
-    txt="User "+str(c[2])+" commented at "+str(c[3])[:8]+"\n"+c[4]
-    Label(main_screen,text=txt).place(x=0,y=k)
-    k+=40
+        cur.execute("SELECT * FROM COMMENTS WHERE ARTICLE_ID="+a_id)
+        c=cur.fetchall()[-1]
+        txt="User "+str(c[2])+" commented on "+str(c[3])+" at "+str(c[4])[:8]+"\n"+c[5]
+        Label(main_screen,text=txt).place(x=0,y=k)
+        k+=40
 
 
 def back():
     main_screen.destroy()
     os.system("python SearchPage.py "+uid)
+
+def edit_cont():
+    main_screen.destroy()
+    os.system("python EditContent.py "+uid+" "+a_id)
 
 article()
 

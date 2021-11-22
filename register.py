@@ -54,7 +54,7 @@ d1=Entry(root,width=40,bd=4)
 u=Label(root,text="Address",font = ('Verdana',24,'bold'),bg='#4db4f0')
 u1=Entry(root,width=40,bd=4)
 f=Label(root,text="Create Password",font = ('Verdana',18,'bold'),bg='#4db4f0')
-f1=Entry(root,width=20,bd=4)
+f1=Entry(root,width=20,bd=4,show='#')
 g = Button(root, text="Create Account",command=fun)
 h=Button(root, text="Clear",command=fun1)
 

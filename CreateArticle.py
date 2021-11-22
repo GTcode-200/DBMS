@@ -2,6 +2,7 @@ from tkinter import *
 import os
 import psycopg2
 import sys
+from datetime import datetime
 
 uid=sys.argv[1]
 
@@ -68,6 +69,15 @@ def submit():
         article_id=1
 
     cur.execute("INSERT INTO ARTICLE VALUES(%s,%s,%s,%s,%s,%s)",(int(article_id),uid,cid,title,content,desc))
+    con.commit()
+
+    cur.execute("SELECT * FROM EDIT_HISTORY")
+    edit_rows=cur.fetchall()
+    if(edit_rows):
+        edit_id=edit_rows[-1][0]+1
+    else:
+        edit_id=1
+    cur.execute("INSERT INTO EDIT_HISTORY VALUES(%s,%s,%s,%s,%s,%s)",(edit_id,article_id,datetime.now(),datetime.now(),'created',uid))
     con.commit()
 
     main_screen.destroy()
