@@ -43,6 +43,7 @@ create table ARTICLE
     edit_id int,
     article_id int,
     edit_time time,
+    edit_date date,
     edit_type varchar,
     user_id int,
     primary key(edit_id),
@@ -55,6 +56,7 @@ create table ARTICLE
      comment_id int,
      article_id int,
      user_id int,
+     comm_date date,
      comm_time time,
      comm_content varchar,
      primary key(comment_id),
@@ -87,5 +89,9 @@ create table ARTICLE
  INSERT INTO ARTICLE_CATEGORY VALUES(2,'Related to the latest innovations in computer science and tech','Technology');
  INSERT INTO ARTICLE_CATEGORY VALUES(3,'Adding Fun to your Life','Gaming');
  INSERT INTO ARTICLE_CATEGORY VALUES(4,'A Great place for education','Educational');
+
+ INSERT INTO USER_PERMISSION VALUES(555,1,'Admin1','9876543210','admin1@gmail.com','Admin 1 Address','admin','root');
+ INSERT INTO USER_PERMISSION VALUES(666,1,'Admin2','9876543211','admin2@gmail.com','Admin 2 Address','admin','root');
+
 
 
