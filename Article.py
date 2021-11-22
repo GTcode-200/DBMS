@@ -28,16 +28,27 @@ cur.execute("SELECT USER_NAME FROM USER_PERMISSION WHERE USER_ID="+str(au_id))
 uname=cur.fetchone()[0]
 cur.execute("SELECT PER_ID FROM USER_PERMISSION WHERE USER_ID="+uid)
 pid=cur.fetchone()[0]
+cur.execute("SELECT AVG(RATING) FROM RATING GROUP BY ARTICLE_ID HAVING ARTICLE_ID="+a_id)
+avg=cur.fetchone()
+
+
 
 
 k=450
 
 
 def article():
-    global main_screen,k
+    global main_screen,k,clicked,rate_label
     main_screen = Tk()
     main_screen.geometry("3000x1000")
     main_screen.title("Article")
+
+    if(avg):
+        rate_label = Label(text="Rating for this article:"+str(avg[0]))
+        rate_label.place(x=1200,y=200)
+    else:
+        rate_label = Label(text="No rating yet")
+        rate_label.place(x=1200,y=200)
 
     Label(main_screen, text="Title:"+row[3]).pack()
     article_title = Label(main_screen, text="").pack()
@@ -58,7 +69,7 @@ def article():
     article_content = Label(main_screen, text="").pack()
 
     clicked = StringVar()
-    clicked.set("")
+    clicked.set(0)
 
     l=[]
 
@@ -93,8 +104,9 @@ def article():
     post=Button(main_screen,text="Post Comment",command=post_comment)
     post.pack()
 
-    Label(main_screen, text="Rating: ").pack()
-    article_rating = OptionMenu(main_screen, clicked, *ratings).pack()
+    Label(main_screen, text="Rate This: ").place(x=1250,y=100)
+    article_rating = OptionMenu(main_screen, clicked, *ratings).place(x=1300,y=100)
+    Button(main_screen,text="Rate article",command=rate).place(x=1270,y=150)
 
     if(int(uid)==row[1] or pid==1):
         Button(text="Edit Content",command=edit_cont).pack()
@@ -138,6 +150,25 @@ def back():
 def edit_cont():
     main_screen.destroy()
     os.system("python EditContent.py "+uid+" "+a_id)
+
+def rate():
+    rate_value=clicked.get()
+    cur.execute("SELECT ARTICLE_ID,USER_ID FROM RATING")
+    ratings=cur.fetchall()
+
+    if (int(a_id),int(uid)) in ratings:
+        cur.execute("UPDATE RATING SET RATING="+rate_value+" WHERE ARTICLE_ID="+a_id+" AND USER_ID="+uid)
+        con.commit()
+    else:
+        cur.execute("INSERT INTO RATING VALUES(%s,%s,%s)",(a_id,uid,rate_value))
+        con.commit()
+
+    cur.execute("SELECT AVG(RATING) FROM RATING GROUP BY ARTICLE_ID HAVING ARTICLE_ID="+a_id)
+    avg=cur.fetchone()
+
+    rate_label.configure(text="Rating for this article:"+str(avg[0]))
+    
+
 
 article()
 

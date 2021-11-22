@@ -76,11 +76,10 @@ create table ARTICLE
 
  create table RATING
  (
-     article_rate_id int,
      article_id int,
      user_id int,
      rating float,
-     primary key(article_rate_id,article_id),
+     primary key(article_id,user_id),
      foreign key(article_id) references ARTICLE(article_id),
      foreign key(user_id) references USER_PERMISSION(user_id)
  );
