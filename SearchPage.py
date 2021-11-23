@@ -45,7 +45,7 @@ def search():
         main_screen.destroy()
         os.system("python Article.py "+str(uid)+" "+str(a_id))
     else:
-        Label(text="article not present").pack()
+        Label(text="Article not present").pack()
 
 def back():
     main_screen.destroy()
