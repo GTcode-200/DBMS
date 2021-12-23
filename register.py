@@ -14,7 +14,7 @@ l2.place(x=1, y=2)'''
 
 
 def entry():
-    os.system("python entry1.py")
+    os.system("py entry1.py")
 def connect():
     global cur,con
     con=psycopg2.connect(
@@ -29,7 +29,7 @@ def fun():
     cur.execute("INSERT INTO USER_PERMISSION VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(int(a1.get()),0,b1.get(),c1.get(),d1.get(),u1.get(),"user",f1.get()))
     con.commit()
     root.destroy()
-    os.system("python login.py")
+    os.system("py login.py")
     #var=cur.fetchall()
 def fun1():
     root.update()

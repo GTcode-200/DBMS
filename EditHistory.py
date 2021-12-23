@@ -23,6 +23,7 @@ def EditHistory():
     main_screen = Tk()
     main_screen.geometry("3000x1000")
     main_screen.title("Edit History")
+    main_screen.configure(bg='#f2c496')
 
     '''Label(main_screen, text="User: ").pack()
     user_edit = Label(main_screen, text="user1").pack()
@@ -48,7 +49,7 @@ def EditHistory():
 
 def back():
     main_screen.destroy()
-    os.system("python Article.py "+uid+" "+a_id)
+    os.system("py Article.py "+uid+" "+a_id)
     
 
 

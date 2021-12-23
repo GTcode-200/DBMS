@@ -40,33 +40,39 @@ k=450
 def article():
     global main_screen,k,clicked,rate_label,comments_dict
     main_screen = Tk()
-    main_screen.geometry("3000x1000")
+    main_screen.geometry("1200x1200")
     main_screen.title("Article")
+    main_screen.configure(bg='#f2c496')
 
     if(avg):
-        rate_label = Label(text="Rating for this article:"+str(avg[0]))
+        rate_label = Label(text="Rating for this article:"+str(avg[0]), bg='#f2c496')
         rate_label.place(x=1200,y=200)
     else:
-        rate_label = Label(text="No rating yet")
+        rate_label = Label(text="No rating yet", bg='#f2c496')
         rate_label.place(x=1200,y=200)
 
-    Label(main_screen, text="Title:"+row[3]).pack()
-    article_title = Label(main_screen, text="").pack()
-    Label(main_screen,text="Author:"+uname).pack()
+    Label(main_screen, text="Title:"+row[3], bg='#f2c496').pack()
+    article_title = Label(main_screen, text="", bg='#f2c496').pack()
+    Label(main_screen,text="Author:"+uname, bg='#f2c496').pack()
 
     Button(text="Edit History", height=1, width=40,command=edit).place(x=1200, y=0)
 
-    Label(main_screen, text="Description:"+row[5]).pack()
-    article_desc = Label(main_screen, text="").pack()
+    Label(main_screen, text="Description:"+row[5], bg='#f2c496').pack()
+    article_desc = Label(main_screen, text="", bg='#f2c496').pack()
 
     cur.execute("SELECT CATEGORY_TITLE,CATEGORY_DESC FROM ARTICLE_CATEGORY WHERE CATEGORY_ID="+str(row[2]))
     categ=cur.fetchone()
 
-    Label(main_screen,text="Category:"+categ[0]+"-"+categ[1]).pack()
-    article_category = Label(main_screen, text="").pack()
+    Label(main_screen,text="Category:"+categ[0]+"-"+categ[1], bg='#f2c496').pack()
+    article_category = Label(main_screen, text="", bg='#f2c496').pack()
 
-    Label(main_screen, text="Content:"+row[4]).pack()
-    article_content = Label(main_screen, text="").pack()
+    lim = 100
+    contentstr = row[4]
+    newstr = ""
+    for i in range(0, len(contentstr), lim):
+        newstr += contentstr[i:i+lim]+"\n"
+    Label(main_screen, text="Content:\n"+newstr, bg='#f2c496').pack()
+    article_content = Label(main_screen, text="", bg='#f2c496').pack()
 
     clicked = StringVar()
     clicked.set(0)
@@ -98,22 +104,22 @@ def article():
         like_count=cur.fetchone()[0]
         comments_dict[c[0]]=Label(main_screen,text=like_count)
         txt="User "+str(c[2])+" commented on "+str(c[3])+" at "+str(c[4])[:8]+"\n"+c[5]
-        Label(main_screen,text=txt).place(x=0,y=k)
+        Label(main_screen,text=txt, bg='#f2c496').place(x=0,y=k)
         Button(main_screen,text="like",command=lambda k=c[0]:like(k)).place(x=0,y=k+40)
         comments_dict[c[0]].place(x=40,y=k+40)
         k+=80
 
     global comm
-    Label(main_screen,text="Add comment:").pack()
+    Label(main_screen,text="Add comment:", bg='#f2c496').pack()
     comm=Entry()
     comm.pack()
 
     post=Button(main_screen,text="Post Comment",command=post_comment)
     post.pack()
 
-    Label(main_screen, text="Rate This: ").place(x=1250,y=100)
+    Label(main_screen, text="Rate This: ", bg='#f2c496').place(x=1250,y=100)
     article_rating = OptionMenu(main_screen, clicked, *ratings).place(x=1300,y=100)
-    Button(main_screen,text="Rate article",command=rate).place(x=1270,y=150)
+    Button(main_screen,text="Rate article",command=rate).place(x=1400,y=100)
 
     if(int(uid)==row[1] or pid==1):
         Button(text="Edit Content",command=edit_cont).pack()
@@ -126,7 +132,7 @@ def article():
 
 def edit():
     main_screen.destroy()
-    os.system("python EditHistory.py "+uid+" "+a_id)
+    os.system("py EditHistory.py "+uid+" "+a_id)
 
 def post_comment():
     global k
@@ -146,7 +152,7 @@ def post_comment():
         cur.execute("SELECT * FROM COMMENTS WHERE ARTICLE_ID="+a_id)
         c=cur.fetchall()[-1]
         txt="User "+str(c[2])+" commented on "+str(c[3])+" at "+str(c[4])[:8]+"\n"+c[5]
-        Label(main_screen,text=txt).place(x=0,y=k)
+        Label(main_screen,text=txt, bg='#f2c496').place(x=0,y=k)
         Button(main_screen,text="like",command=lambda k=comm_id:like(k)).place(x=0,y=k+40)
         comments_dict[comm_id]=Label(text="0")
         comments_dict[comm_id].place(x=40,y=k+40)
@@ -155,11 +161,11 @@ def post_comment():
 
 def back():
     main_screen.destroy()
-    os.system("python SearchPage.py "+uid)
+    os.system("py SearchPage.py "+uid)
 
 def edit_cont():
     main_screen.destroy()
-    os.system("python EditContent.py "+uid+" "+a_id)
+    os.system("py EditContent.py "+uid+" "+a_id)
 
 def rate():
     rate_value=clicked.get()

@@ -23,6 +23,7 @@ def edit_content():
     global main_screen
     main_screen = Tk()
     main_screen.geometry("3000x1000")
+    main_screen.configure(bg='#f2c496')
 
     global articles
     cur.execute("SELECT * FROM ARTICLE WHERE ARTICLE_ID="+a_id)
@@ -42,7 +43,7 @@ def edit_content():
 
 def back():
     main_screen.destroy()
-    os.system("python Article.py "+uid+" "+a_id)
+    os.system("py Article.py "+uid+" "+a_id)
 
 def confirm():
     cur.execute("UPDATE ARTICLE SET ARTICLE_CONTENT='"+article_content.get(1.0, "end-1c")+"'")
@@ -56,7 +57,7 @@ def confirm():
     cur.execute("INSERT INTO EDIT_HISTORY VALUES(%s,%s,%s,%s,%s,%s)",(edit_id,a_id,datetime.now(),datetime.now(),'modified',uid))
     con.commit()
     main_screen.destroy()
-    os.system("python Article.py "+uid+" "+a_id)
+    os.system("py Article.py "+uid+" "+a_id)
 
 edit_content()
 

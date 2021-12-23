@@ -33,12 +33,12 @@ def reg():
 
     master.destroy()
 
-    os.system("python register.py")
+    os.system("py register.py")
 
 
 def entry():
 
-    cmd="python Window1.py "+uname
+    cmd="py Window1.py "+uname
     os.system(cmd)
 
 

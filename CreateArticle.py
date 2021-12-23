@@ -18,37 +18,78 @@ def connect():
 )
     cur = con.cursor()
 
+# def create_article():
+#     global main_screen
+#     global article_title,article_description
+#     main_screen = Tk()
+#     main_screen.geometry("3000x1000")
+#     main_screen.title("Create an Article")
+
+#     Label(main_screen, text="Title: ").pack()
+#     article_title = Entry(main_screen)
+#     article_title.pack()
+
+#     Label(main_screen, text="Description: ").pack()
+#     article_description = Entry(main_screen)
+#     article_description.pack()
+
+    
+
+#     global clicked
+#     global article_content
+    
+#     clicked = StringVar()
+#     clicked.set("")
+#     categories = ["Fashion", "Technology", "Gaming", "Educational"]
+#     Label(main_screen, text="Category: ").pack()
+#     article_category = OptionMenu(main_screen, clicked, *categories).pack()
+    
+#     Label(main_screen, text="Content: ").pack()
+#     article_content = Text(main_screen,height=10,width=50)
+#     article_content.pack()
+
+#     Button(main_screen, text="Submit",command=submit).pack()
+
+#     main_screen.mainloop()
+
 def create_article():
     global main_screen
     global article_title,article_description
     main_screen = Tk()
-    main_screen.geometry("3000x1000")
+    main_screen.geometry("1000x650")
     main_screen.title("Create an Article")
+    main_screen.configure(bg='#f2c496')
 
-    Label(main_screen, text="Title: ").pack()
+    Label(main_screen, text="Enter the details to create your Article!", bg='#f2c496').pack()
+    Label(main_screen, text="", bg='#f2c496').pack()
+
+    Label(main_screen, text="Title: ", bg='#f2c496').pack()
     article_title = Entry(main_screen)
     article_title.pack()
+    Label(main_screen, text="", bg='#f2c496').pack()
 
-    Label(main_screen, text="Description: ").pack()
-    article_description = Entry(main_screen)
+    Label(main_screen, text="Description: ", bg='#f2c496').pack()
+    article_description = Text(main_screen, height=3, width=40)
     article_description.pack()
+    Label(main_screen, text="", bg='#f2c496').pack()
 
-    
 
     global clicked
     global article_content
-    
+
     clicked = StringVar()
-    clicked.set("")
+    clicked.set("Choose a category")
     categories = ["Fashion", "Technology", "Gaming", "Educational"]
-    Label(main_screen, text="Category: ").pack()
+    Label(main_screen, text="Category: ", bg='#f2c496').pack()
     article_category = OptionMenu(main_screen, clicked, *categories).pack()
-    
-    Label(main_screen, text="Content: ").pack()
-    article_content = Text(main_screen,height=10,width=50)
+    Label(main_screen, text="", bg='#f2c496').pack()
+
+    Label(main_screen, text="Content: ", bg='#f2c496').pack()
+    article_content = Text(main_screen,height=15,width=80)
     article_content.pack()
 
-    Button(main_screen, text="Submit",command=submit).pack()
+    Label(main_screen, text="", bg='#f2c496').pack()
+    Button(main_screen, text="Submit", command=submit,bd=2, bg='#eddaa1').pack()
 
     main_screen.mainloop()
 
@@ -58,7 +99,7 @@ def submit():
     cid=category_id[category]
     content = article_content.get(1.0, "end-1c")
     title=article_title.get()
-    desc=article_description.get()
+    desc=article_description.get(1.0, "end-1c")
 
     cur.execute("SELECT * FROM ARTICLE")
     rows=cur.fetchall()
@@ -81,7 +122,7 @@ def submit():
     con.commit()
 
     main_screen.destroy()
-    os.system("python Window1.py "+uid)
+    os.system("py Window1.py "+uid)
     
 
 create_article()
